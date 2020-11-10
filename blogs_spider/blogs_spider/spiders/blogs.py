@@ -47,7 +47,8 @@ class BlogsSpider(scrapy.Spider):
             item["release_t"] = re.search('(\d+.*)', t).group(1)
             tag_list = response.css('.news_tags a::text').extract()
             item["tags"] = ','.join(tag_list)
-            item["come_from"] = response.css('#come_from a::text').extract_first() if len(response.css('#come_from a::text')) > 0 else None
+            item["come_from"] = response.css('#come_from a::text').extract_first() if len(
+                response.css('#come_from a::text')) > 0 else None
             # item["news_content"] = response.css('#news_body').extract()[0]  # 文章内容
             news_id = n_id.group(1)
             json_url = 'https://news.cnblogs.com/NewsAjax/GetAjaxNewsInfo?contentId={}'.format(news_id)
@@ -65,4 +66,3 @@ class BlogsSpider(scrapy.Spider):
         item["diggnum"] = data['DiggCount']  # 点赞数
         item['url_obj_id'] = get_md5(item['url'])
         yield item
-
