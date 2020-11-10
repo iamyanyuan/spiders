@@ -39,7 +39,8 @@ class MysqlBlogsPipleline(object):
             item_list.append(item.get('diggnum', 0))
             item_list.append(item.get('url_obj_id', ''))
             my_sql = """
-                insert into newblogs(title, url, release_t, tags, come_from, comment_count, read_count, diggnum, url_obj_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                insert into newblogs(title, url, release_t, tags, come_from, comment_count, read_count, diggnum, url_obj_id) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
             self.coursor.execute(my_sql, tuple(item_list))  # 执行sql语句
             self.coon.commit()
@@ -57,7 +58,7 @@ class JsonBlogsPipleline(object):
 
     def open_spider(self, spider):
         if spider.name == 'blogs':
-            self.file = codecs.open('article.json', 'w', encoding="utf-8")
+            self.file = codecs.open('article.json', 'a', encoding="utf-8")
 
     def process_item(self, item, spider):
         if spider.name == 'blogs':

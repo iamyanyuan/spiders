@@ -4,8 +4,11 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+import random
+from fake_useragent import UserAgent, FakeUserAgentError
 from scrapy import signals
+
+from blogs_spider.settings import USER_AGENTS_LIST
 
 
 class BlogsSpiderSpiderMiddleware(object):
@@ -101,3 +104,18 @@ class BlogsSpiderDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class UserAgenMiddleware(object):
+    """随机更换ua"""
+
+    def process_request(self, request, spider):
+        try:
+            # 从第三方库fake_useragent中获取随机ua
+            ua = UserAgent()
+            request.headers['User-Agent'] = ua.random
+        except FakeUserAgentError:
+            # 从自定义UA列表中随机取一个
+            ua = random.choice(USER_AGENTS_LIST)
+            request.headers['User-Agent'] = ua
+            print(request.headers['User-Agent'])

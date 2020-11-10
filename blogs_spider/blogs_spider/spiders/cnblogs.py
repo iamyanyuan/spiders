@@ -6,19 +6,43 @@ from scrapy.spiders import CrawlSpider, Rule
 import re
 from urllib import parse
 from blogs_spider.utils.common import get_md5
+from scrapy_redis.spiders import RedisSpider
+import time
 
 
-class CnblogsSpider(CrawlSpider):
+class CnblogsSpider(RedisSpider):
     name = 'cnblogs'
     allowed_domains = ['cnblogs.com']
-    start_urls = ['http://news.cnblogs.com']
+    # start_urls = ['http://news.cnblogs.com']
 
-    rules = (
-        Rule(LinkExtractor(allow=r'/n/\d+'), callback='parse_item'),  # 获取详情页url
+    redis_key = 'cnblogsurl'
+    # lpush cnblogsurl 'http://news.cnblogs.com'
 
-    )
+    def parse(self, response):
+        """
+        1.获取新闻列表页中的url并交给scrapy进行下载后的调用和相应的解析
+        2.获取下一页的URL并交给scrapy进行下载，下载完成后交给parse继续跟进
+        """
+        nodes = response.xpath('//div[@class="content"]')[:13]
+        # nodes = response.xpath('//div[@class="content"]')
 
-    def parse_item(self, response):
+        for li in nodes:
+            art_url = li.xpath('./h2/a/@href').extract_first()  # 文章url
+            img_url = li.xpath('./div[@class="entry_summary"]/a/img/@src').extract_first() if len(
+                li.xpath('./div[@class="entry_summary"]/a/img/@src')) > 0 else None
+
+            yield scrapy.Request(url=parse.urljoin(response.url, art_url), callback=self.parse_detail,
+                                 meta={'img_url': img_url})
+
+        # 翻页
+        # next_url = response.xpath('//a[contains(text(), "Next")]/@href').extract_first()
+        # if next_url:
+        #     time.sleep(5)  # 防止爬虫太快，容易被封，延迟5秒
+        #     next_url = parse.urljoin(response.url, next_url)
+        #     print('url:', next_url)
+        #     yield scrapy.Request(url=next_url, callback=self.parse)
+
+    def parse_detail(self, response):
         item = {}
         n_id = re.match('.*?(\d+)', response.url)
         if n_id:
