@@ -120,6 +120,6 @@ if __name__ == '__main__':
     get_ip = Proxies()
     get_ip.get_random_ip()  # 获取随机IP
 
-    getip = Get_ips()  # 爬取免费代理
+    # getip = Get_ips()  # 爬取免费代理
     # getip.get_yundaili()  # 运行爬虫提取ip
     # getip.put_in_sql()  # ip入库
