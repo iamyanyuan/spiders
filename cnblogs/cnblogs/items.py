@@ -9,6 +9,16 @@ import scrapy
 
 
 class CnblogsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    url = scrapy.Field()
+    title = scrapy.Field()
+    release_t = scrapy.Field()
+    tags = scrapy.Field()
+    come_from = scrapy.Field()
+    comment_count = scrapy.Field()
+    read_count = scrapy.Field()
+    diggnum = scrapy.Field()
+    url_obj_id = scrapy.Field()
+    img_url = scrapy.Field()
+    img_path = scrapy.Field()
+    news_content = scrapy.Field()
+

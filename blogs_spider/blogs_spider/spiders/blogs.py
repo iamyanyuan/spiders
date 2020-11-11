@@ -43,8 +43,11 @@ class BlogsSpider(scrapy.Spider):
         n_id = re.match('.*?(\d+)', response.url)
         if n_id:
             item["title"] = response.css('#news_title a::text').extract_first()
-            t = response.css('span.time::text').extract_first()
-            item["release_t"] = re.search('(\d+.*)', t).group(1)
+            t = response.css('span.time::text').extract_first() if len(response.css('span.time::text')) > 0 else None
+            if t is not None:
+                item["release_t"] = re.search('(\d+.*)', t).group(1)
+            else:
+                item["release_t"] = 'time error'
             tag_list = response.css('.news_tags a::text').extract()
             item["tags"] = ','.join(tag_list)
             item["come_from"] = response.css('#come_from a::text').extract_first() if len(

@@ -4,8 +4,10 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+import random
+from fake_useragent import FakeUserAgentError, UserAgent
 from scrapy import signals
+from cnblogs.settings import USER_AGENTS_LIST, PROXIES_LIST
 
 
 class CnblogsSpiderMiddleware(object):
@@ -101,3 +103,31 @@ class CnblogsDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class UserAgenMiddleware(object):
+    """随机更换ua"""
+
+    def process_request(self, request, spider):
+        try:
+            # 从第三方库fake_useragent中获取随机ua
+            ua = UserAgent()
+            request.headers['User-Agent'] = ua.random
+        except FakeUserAgentError:
+            # 从自定义UA列表中随机取一个
+            ua = random.choice(USER_AGENTS_LIST)
+            request.headers['User-Agent'] = ua
+            print(request.headers['User-Agent'])
+
+
+class ProxyMiddleware(object):
+    """随机代理ip"""
+    def process_request(self, request, spider):
+
+        try:
+            proxy = random.choice(PROXIES_LIST)
+            # proxy = Proxies().get_random_ip()
+            request.meta['proxy'] = proxy
+            print(proxy)
+        except Exception as e:
+            print('The proxy is error')

@@ -126,11 +126,12 @@ class ProxyMiddleware(object):
     def process_request(self, request, spider):
 
         try:
-            proxy = Proxies().get_random_ip()
-            request.meta['proxy'] = proxy
-        except Exception as e:
             proxy = random.choice(PROXIES_LIST)
+            # proxy = Proxies().get_random_ip()
             request.meta['proxy'] = proxy
+            print(proxy)
+        except Exception as e:
+            print('The proxy is error')
 
 
 
