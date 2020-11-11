@@ -7,8 +7,8 @@
 import random
 from fake_useragent import UserAgent, FakeUserAgentError
 from scrapy import signals
-
-from blogs_spider.settings import USER_AGENTS_LIST
+from tools.proxy_ip import Proxies
+from blogs_spider.settings import USER_AGENTS_LIST, PROXIES_LIST
 
 
 class BlogsSpiderSpiderMiddleware(object):
@@ -119,6 +119,18 @@ class UserAgenMiddleware(object):
             ua = random.choice(USER_AGENTS_LIST)
             request.headers['User-Agent'] = ua
             print(request.headers['User-Agent'])
+
+
+class ProxyMiddleware(object):
+    """随机代理ip"""
+    def process_request(self, request, spider):
+
+        try:
+            proxy = Proxies().get_random_ip()
+            request.meta['proxy'] = proxy
+        except Exception as e:
+            proxy = random.choice(PROXIES_LIST)
+            request.meta['proxy'] = proxy
 
 
 

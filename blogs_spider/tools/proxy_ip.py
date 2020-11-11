@@ -73,7 +73,7 @@ class Proxies(object):
         conn.commit()
 
     def get_useful_ip(self, ip, port, proxy_type):
-        url = 'http://www.baidu.com'
+        url = 'https://www.baidu.com'
         if proxy_type == 'HTTP':
             proxy_url = 'http://{}:{}'.format(ip, port)
             proxies = {'http': proxy_url}
@@ -83,17 +83,20 @@ class Proxies(object):
         try:
             response = requests.get(url, proxies=proxies)
         except Exception as e:
-            print('Ip invalid')
+            # print('Ip invalid')
             self.delete_ip(ip)
+            return False
         else:
             code = response.status_code
             if code < 200 and code > 300:
-                print('Ip invalid')
+                # print('Ip invalid')
                 self.delete_ip(ip)
+                return False
 
             else:
                 # code >= 200 and code < 300:
                 print('Ip useful:', ip)
+                return True
 
     def get_random_ip(self):
         rand_sql = "select ip, port, proxy_type from proxy order by rand() limit 1"
@@ -104,21 +107,21 @@ class Proxies(object):
             port = i[1]
             proxy_type = i[2]
             useful_ip = self.get_useful_ip(ip, port, proxy_type)
-
-            if useful_ip:
-                if proxy_type == 'HTTP':
-                    print("http://{}:{}".format(ip, port))
-                    return "http://{}:{}".format(ip, port)
+            try:
+                if useful_ip:
+                    if proxy_type == 'HTTP':
+                        return "http://{}:{}".format(ip, port)
+                    else:
+                        return "https://{}:{}".format(ip, port)
                 else:
-                    print("https://{}:{}".format(ip, port))
-                    return "https://{}:{}".format(ip, port)
-            else:
-                return self.get_random_ip()
+                    return self.get_random_ip()
+            except Exception as e:
+                print('get ip error')
 
 
 if __name__ == '__main__':
     get_ip = Proxies()
-    get_ip.get_random_ip()  # 获取随机IP
+    print(get_ip.get_random_ip())  # https://27.8.29.255:9999
 
     # getip = Get_ips()  # 爬取免费代理
     # getip.get_yundaili()  # 运行爬虫提取ip

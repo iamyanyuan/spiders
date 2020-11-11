@@ -54,7 +54,9 @@ ROBOTSTXT_OBEY = False
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'blogs_spider.middlewares.UserAgenMiddleware': 1,  # 随机ua
+    'blogs_spider.middlewares.ProxyMiddleware': 1,  # 随机IP
+    'blogs_spider.middlewares.UserAgenMiddleware': 2,  # 随机ua
+
     # 'blogs_spider.middlewares.BlogsSpiderDownloaderMiddleware': 543,
 
 }
@@ -113,4 +115,22 @@ USER_AGENTS_LIST = [
     "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070215 K-Ninja/2.1.1",
     "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9) Gecko/20080705 Firefox/3.0 Kapiko/3.0",
     "Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5"
+]
+
+PROXIES_LIST = [
+'https://114.99.12.246:4226',
+'https://110.88.29.248:4284',
+'https://121.226.76.213:4264',
+'https://106.5.193.70:4217',
+'https://49.85.110.149:4226',
+'https://121.56.36.21:4283',
+'https://59.62.27.52:4236',
+'http://59.62.41.4:4236',
+'http://183.166.125.156:4231',
+'http://119.5.74.225:4278',
+'http://101.206.44.153:4215',
+'http://112.85.45.199:4217',
+'http://124.112.203.35:4278',
+'http://119.7.182.165:4258'
+
 ]

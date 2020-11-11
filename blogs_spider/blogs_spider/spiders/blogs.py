@@ -19,8 +19,8 @@ class BlogsSpider(scrapy.Spider):
         1.获取新闻列表页中的url并交给scrapy进行下载后的调用和相应的解析
         2.获取下一页的URL并交给scrapy进行下载，下载完成后交给parse继续跟进
         """
-        nodes = response.xpath('//div[@class="content"]')[:3]
-        # nodes = response.xpath('//div[@class="content"]')
+        # nodes = response.xpath('//div[@class="content"]')[:3]
+        nodes = response.xpath('//div[@class="content"]')
 
         for li in nodes:
             art_url = li.xpath('./h2/a/@href').extract_first()  # 文章url
@@ -31,10 +31,10 @@ class BlogsSpider(scrapy.Spider):
                                  meta={'img_url': img_url})
 
         # 翻页
-        # next_url = response.xpath('//a[contains(text(), "Next")]/@href').extract_first()
-        # next_url = parse.urljoin(response.url, next_url)
-        # print('url:', next_url)
-        # yield scrapy.Request(url=next_url, callback=self.parse)
+        next_url = response.xpath('//a[contains(text(), "Next")]/@href').extract_first()
+        next_url = parse.urljoin(response.url, next_url)
+        print('url:', next_url)
+        yield scrapy.Request(url=next_url, callback=self.parse)
 
     def parse_detail(self, response):
         """抓取详情信息"""
