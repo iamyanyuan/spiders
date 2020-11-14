@@ -16,7 +16,6 @@ class TaobaoSpider():
             'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'
         })
         self.driver.maximize_window()  # 最大化窗口
-        self.base_url = 'https://www.taobao.com/'
 
     def get_url(self, url):
         self.driver.get(url=url)
@@ -72,14 +71,13 @@ class TaobaoSpider():
                 print('write error')
         self.driver.quit()
 
-    def run(self):
-        self.get_url(self.base_url)
-        username = 'tb账号'  # tb账号
-        password = '淘宝密码'  # 密码
-        keyword = '女包 小清新'  # 搜索关键词
-        self.search_parse_save(username, password, keyword)
-
 
 if __name__ == '__main__':
     tb = TaobaoSpider()
-    tb.run()
+
+    base_url = 'https://www.taobao.com/'
+    username = 'tb账号'  # tb账号
+    password = '密码'  # 密码
+    keyword = '女包 小清新'  # 搜索关键词
+    tb.get_url(base_url)
+    tb.search_parse_save(username, password, keyword)
