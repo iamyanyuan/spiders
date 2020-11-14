@@ -21,6 +21,16 @@
 
 注意：免费代理大部分是不能使用，建议使用付费代理ip测试，或者两个结合
 
+scrapy的暂停和重启：
+1、先创建一个目录用于存放任务
+启动命令
+```scrapy crawl blogs -s JOBDIR=jobs/blog001```
+
+main.py文件中设置
+execute(['scrapy', 'crawl', 'blogs', '-s', 'JOBDIR=jobs/blog001'])
 
 
+验证码识别说明：
+1、Tesseract OCR 图片识别引擎只能识别比较简单的验证码
+2、另外三个是付费打码，可根据自己需求选择，有好的打码平台页可以分享。
            
