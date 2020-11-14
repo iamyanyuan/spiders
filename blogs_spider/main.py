@@ -6,7 +6,11 @@ import os
 print(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-execute(['scrapy', 'crawl', 'blogs'])
+# execute(['scrapy', 'crawl', 'blogs'])
+# scrapy crawl blogs -s JOBDIR=jobs/blog001
+execute(['scrapy', 'crawl', 'blogs', '-s', 'JOBDIR=jobs/blog001'])
+
+
 # execute(['scrapy', 'crawl', 'cnblogs'])
 
 # while True:

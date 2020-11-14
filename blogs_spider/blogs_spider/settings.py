@@ -54,7 +54,7 @@ ROBOTSTXT_OBEY = False
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'blogs_spider.middlewares.ProxyMiddleware': 1,  # 随机IP
+    # 'blogs_spider.middlewares.ProxyMiddleware': 1,  # 随机IP
     'blogs_spider.middlewares.UserAgenMiddleware': 2,  # 随机ua
 
     # 'blogs_spider.middlewares.BlogsSpiderDownloaderMiddleware': 543,
